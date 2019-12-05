@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1574345144940.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4FFAB528",
+    "lastKnownWriteTime" : 1574345163,
+    "last_content_update" : 1574345163904,
+    "path" : "~/Desktop/Oslo/Autumn2019/incompleteData/allFunctions.R",
+    "project_path" : "allFunctions.R",
+    "properties" : {
+        "cursorPosition" : "12,29",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

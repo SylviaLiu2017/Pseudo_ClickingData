@@ -10,14 +10,14 @@ require(abind)
 source("./allFunctions.R")
 source("./pseudoSamplingFuncs.R")
 compute_method<-"package"
-data_mode<-"potatoes"
+data_mode<-"simulation"
 
 #################generate some data###################
 if(data_mode=="simulation"){
   n<-20  
-  N<-50
+  N<-20
   rho0<-1:n
-  alpha0<-5
+  alpha0<-3
   load("./Cdfootrule.RData")
   if(n>20){
     fitvec = estimate_partition_function(alpha_vector = seq(0.01,10,0.2), n_items = 50,metric = "footrule", nmc = 2000,degree=10)
@@ -33,7 +33,7 @@ if(data_mode=="simulation"){
 
 n<-dim(origin_data)[2]
 N<-dim(origin_data)[1]
-lambda<-floor(n/3)
+lambda<-5
 clicking_data<-createClickData(origin_data,lambda)
 
 centre_inferred<-n+1-rank(apply(clicking_data,2,sum),ties.method = "first")
@@ -41,19 +41,47 @@ data_init<-t(apply(clicking_data,1,generateInit_oneuser_2,centre = centre_inferr
 
 
 
-n_samples<-100
+n_samples<-6000
 rhoSamples<-vector()
 data_curr<-data_init
 sigma<-0
 userArray3D<-data_init
 user2D<-data_init
+colnames(data_init)<-1:n
 
+start <- proc.time()  
 for(sample_i in 1:n_samples){
   print(sample_i)
-  rho_curr<-sampleRho(user2D,sigma,10)
+  rho_curr<-sampleRho(user2D,sigma,alpha0 = 5)
   rhoSamples<-rbind(rhoSamples,rho_curr)
-  user2D<-t(apply(clicking_data,1,sampleForOneUserClicks,rho_curr=rho_curr,alpha0=10))
+  user2D<-t(apply(clicking_data,1,sampleForOneUserClicks,rho_curr=rho_curr,alpha0=5))
   userArray3D<-abind(userArray3D,user2D,along = 3)
 }
 
+duration1<-proc.time()-start
+userArray3D<-userArray3D[,,2001:n_samples]
+K<-2
+recs<-vector()
+truth<-vector()
+
+for(userj in 1:N){
+  heatMat_userj<-heatMap(t(userArray3D[userj,,]),1:n)
+  recs<-rbind(recs,recommendK(heatMat_userj,K, clicking_data[userj,],type="click"))
+  truth<-rbind(truth, realTopK(clicking_data[userj,], origin_data[userj,],K,type="click"))
+}
+
+correctOrWrong<-recs
+for(userj in 1:N){
+  correctOrWrong[userj,]<-recs[userj,]%in%truth[userj,]
+  
+}
+
+mean(correctOrWrong)
+
+
+heatMat_pseudo<-heatMap(rhoSamples,rho0)
+par(mai=c(1,1,0.65,1))
+image(heatMat_pseudo,col=tim.colors(64*10),zlim=c(0,1),axes=F,cex.lab=2, main="pseudo-likelihood")
+par(mai=c(1,1,0.65,1))
+image.plot(heatMat_pseudo, zlim=c(0,1),legend.only=T,horizontal = F)
 

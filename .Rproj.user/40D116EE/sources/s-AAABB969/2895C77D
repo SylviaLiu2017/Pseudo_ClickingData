@@ -7,16 +7,16 @@
     "folds" : "",
     "hash" : "0",
     "id" : "2895C77D",
-    "lastKnownWriteTime" : 1575554278,
-    "last_content_update" : 1575554278061,
+    "lastKnownWriteTime" : 1575647776,
+    "last_content_update" : 1575647776504,
     "path" : "~/Desktop/Oslo/Autumn2019/incompleteData/clicking.R",
     "project_path" : "clicking.R",
     "properties" : {
-        "cursorPosition" : "41,0",
-        "scrollLine" : "34",
+        "cursorPosition" : "87,0",
+        "scrollLine" : "12",
         "tempName" : "Untitled2"
     },
-    "relative_order" : 5,
+    "relative_order" : 1,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

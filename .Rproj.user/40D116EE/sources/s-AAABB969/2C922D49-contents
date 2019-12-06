@@ -92,7 +92,7 @@ truth<-vector()
 
 for(userj in 1:N){
   heatMat_userj<-heatMap(t(userArray3D[userj,,]),1:n)
-  recs<-rbind(recs,recommendK(heatMat_userj,K, partialData[userj,]))
+  recs<-rbind(recs,recommendK(heatMat_userj,K, partialData[userj,],type = "partial"))
   truth<-rbind(truth, realTopK(partialData[userj,], origin_data[userj,],K))
 }
 

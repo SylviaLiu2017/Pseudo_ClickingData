@@ -74,8 +74,13 @@ sampleForOneUser<-function(userVec,rho_curr,alpha0){
   return(user_j)
 }
 
-recommendK<-function(posteriorTable, K, partialVec){
-  ranked<-max(partialVec)
+recommendK<-function(posteriorTable, K, partialVec, type){
+  if(type=="partial"){
+    ranked<-max(partialVec)  
+  }else if(type == "click"){
+    ranked<-sum(partialVec)
+  }
+  
   if(K == 1){
     posteriorProbs<-posteriorTable[,(ranked+1)]
   }
@@ -85,8 +90,12 @@ recommendK<-function(posteriorTable, K, partialVec){
   return(which(posteriorProbs>=sort(posteriorProbs,decreasing = TRUE)[K])[1:K])
 }
 
-realTopK<-function(data_partial, data_orig,K){
-  ranked<-max(data_partial)
+realTopK<-function(data_partial, data_orig,K,type){
+  if(type=="partial"){
+    ranked<-max(data_partial)  
+  }else if(type=="click"){
+    ranked<-sum(data_partial)
+  }
   range<-(ranked+1):(ranked+K)
   return(which(data_orig%in%range))
 }
@@ -118,7 +127,7 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
   user_j_clicked<-user_vec[nonzeroLocats]
   user_j_unclicked<-user_vec[zeroLocats]
   user_j<-user_vec
-  for(j in 1:length(nonzeroLocats)){
+  for(j in sample(1:length(nonzeroLocats))){
     dist<-abs(support1-rho_curr1[j])
     log_num<-(-alpha0/(n)*(dist)) - max(-alpha0/(n)*(dist)) 
     log_denom<- log(sum(exp(log_num)))
@@ -128,7 +137,7 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
     user_j_clicked[j]<-support1[indOfCdf]
     support1<-setdiff(support1,user_j_clicked[j]) 
   }
-  for(k in 1:length(zeroLocats)){
+  for(k in sample(1:length(zeroLocats))){
     dist<-abs(support2-rho_curr2[k])
     log_num<-(-alpha0/(n)*(dist)) - max(-alpha0/(n)*(dist)) 
     log_denom<- log(sum(exp(log_num)))

@@ -1,3 +1,0 @@
-a<-matrix(data=c(1:12),ncol=4)
-colnames(a)<-1:4
-as_tibble(a)

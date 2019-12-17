@@ -67,7 +67,7 @@ image(heatMat_pseudo,col=tim.colors(64*10),zlim=c(0,1),axes=F,cex.lab=2)
 par(mai=c(1,1,0.65,1))
 image.plot(heatMat_pseudo, zlim=c(0,1),legend.only=T,horizontal = F)
 
-userj<-20
+userj<-10
 heatMat_userj<-heatMap(t(userArray3D[userj,,]),origin_data[userj,])
 par(mai=c(1,1,0.65,1))
 image(heatMat_userj,col=tim.colors(64*10),zlim=c(0,1),axes=F,cex.lab=2,main= paste("Pseudo, user", userj))

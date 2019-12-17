@@ -170,6 +170,7 @@ generateVOrderings<-function(centre){
   if(n%%2==1){
     ordering[which(distToCentre==0)]<-1
   }
+  
   for(i in distToCentre[distToCentre>0]){
     if(runif(1)>=0.5){
       ordering[which(distToCentre==i)]<-abs(i)*2+1

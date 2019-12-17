@@ -10,12 +10,12 @@ require(abind)
 source("./allFunctions.R")
 source("./pseudoSamplingFuncs.R")
 compute_method<-"package"
-data_mode<-"simulation"
+data_mode<-"potatoes"
 
 #################generate some data###################
 if(data_mode=="simulation"){
   n<-20  
-  N<-20
+  N<-50
   rho0<-1:n
   alpha0<-3
   load("./Cdfootrule.RData")
@@ -39,8 +39,6 @@ clicking_data<-createClickData(origin_data,lambda)
 centre_inferred<-n+1-rank(apply(clicking_data,2,sum),ties.method = "first")
 data_init<-t(apply(clicking_data,1,generateInit_oneuser_2,centre = centre_inferred))
 
-
-
 n_samples<-6000
 rhoSamples<-vector()
 data_curr<-data_init
@@ -52,9 +50,9 @@ colnames(data_init)<-1:n
 start <- proc.time()  
 for(sample_i in 1:n_samples){
   print(sample_i)
-  rho_curr<-sampleRho(user2D,sigma,alpha0 = 5)
+  rho_curr<-sampleRho(user2D,sigma,alpha0 = 10)
   rhoSamples<-rbind(rhoSamples,rho_curr)
-  user2D<-t(apply(clicking_data,1,sampleForOneUserClicks,rho_curr=rho_curr,alpha0=5))
+  user2D<-t(apply(clicking_data,1,sampleForOneUserClicks,rho_curr=rho_curr,alpha0=10))
   userArray3D<-abind(userArray3D,user2D,along = 3)
 }
 

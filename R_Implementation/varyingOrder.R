@@ -24,18 +24,18 @@ pseudoDenom<-function(alpha,data,rho,ordering){
   return(logdenom_marginal)
 }
 ################generate all permutations###################
-source("./allFunctions.R")
+source("./shared/allFunctions.R")
 compute_method<-"package"
 n<-20
 fitvec = 0
 if(n>20){
   fitvec = estimate_partition_function(alpha_vector = seq(0.01,10,0.2), n_items = 50,metric = "footrule", nmc = 2000,degree=10)
 }
-load("./Cdfootrule.RData")
+load("./shared/Cdfootrule.RData")
 #################generate some data###################
 N<-200
 rho0<-1:n
-sourceCpp('MCMC_old.cpp')
+sourceCpp('shared/MCMC_old.cpp')
 sds<-c(seq(0,1,0.1)*n/2)
 #sds<-c(seq(0.5,5,0.5))
 resultTable<-matrix(data=NA, nrow = 1,ncol = length(sds)+2)

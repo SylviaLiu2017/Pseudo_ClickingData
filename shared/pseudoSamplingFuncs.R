@@ -119,9 +119,11 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
   n<-length(user_vec)
   zeroLocats<-which(user_vec<1)
   nonzeroLocats<-which(user_vec >= 1)
+  n1<-length(nonzeroLocats)
+  n2<-length(zeroLocats)
   totalClicks<-length(nonzeroLocats)
-  support1<-1:totalClicks #clicked
-  support2<-1:length(zeroLocats) #unclicked
+  support1<-1:n1 #clicked
+  support2<-1:n2 #unclicked
   rho_curr1<-rank(rho_curr[nonzeroLocats])
   rho_curr2<-rank(rho_curr[zeroLocats])
   user_j_clicked<-user_vec[nonzeroLocats]
@@ -129,7 +131,7 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
   user_j<-user_vec
   for(j in sample(1:length(nonzeroLocats))){
     dist<-abs(support1-rho_curr1[j])
-    log_num<-(-alpha0/(n)*(dist)) - max(-alpha0/(n)*(dist)) 
+    log_num<-(-alpha0/(n1)*(dist)) - max(-alpha0/(n1)*(dist)) 
     log_denom<- log(sum(exp(log_num)))
     probs<-exp((log_num-log_denom))
     rand<-runif(1)
@@ -139,7 +141,7 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
   }
   for(k in sample(1:length(zeroLocats))){
     dist<-abs(support2-rho_curr2[k])
-    log_num<-(-alpha0/(n)*(dist)) - max(-alpha0/(n)*(dist)) 
+    log_num<-(-alpha0/(n2)*(dist)) - max(-alpha0/(n2)*(dist)) 
     log_denom<- log(sum(exp(log_num)))
     probs<-exp((log_num-log_denom))
     rand<-runif(1)
@@ -148,7 +150,7 @@ sampleForOneUserClicks<-function(user_vec,rho_curr,alpha0){
     support2<-setdiff(support2,user_j_unclicked[k]) 
   }
   user_j[nonzeroLocats]<-user_j_clicked
-  user_j[zeroLocats]<-user_j_unclicked+ totalClicks
+  user_j[zeroLocats]<-user_j_unclicked+ n1
   return(user_j)
 }
 

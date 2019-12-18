@@ -7,8 +7,8 @@ require(abind)
 
 
 ################preliminaries###################
-source("./allFunctions.R")
-source("./pseudoSamplingFuncs.R")
+source("./shared/allFunctions.R")
+source("./shared/pseudoSamplingFuncs.R")
 compute_method<-"package"
 data_mode<-"potatoes"
 
@@ -18,7 +18,7 @@ if(data_mode=="simulation"){
   N<-50
   rho0<-1:n
   alpha0<-3
-  load("./Cdfootrule.RData")
+  load("./shared/Cdfootrule.RData")
   if(n>20){
     fitvec = estimate_partition_function(alpha_vector = seq(0.01,10,0.2), n_items = 50,metric = "footrule", nmc = 2000,degree=10)
   }
@@ -39,7 +39,7 @@ clicking_data<-createClickData(origin_data,lambda)
 centre_inferred<-n+1-rank(apply(clicking_data,2,sum),ties.method = "first")
 data_init<-t(apply(clicking_data,1,generateInit_oneuser_2,centre = centre_inferred))
 
-n_samples<-6000
+n_samples<-5000
 rhoSamples<-vector()
 data_curr<-data_init
 sigma<-0
@@ -49,15 +49,18 @@ colnames(data_init)<-1:n
 
 start <- proc.time()  
 for(sample_i in 1:n_samples){
-  print(sample_i)
+  if(sample_i%%100==0){
+    print(sample_i)
+  }
   rho_curr<-sampleRho(user2D,sigma,alpha0 = 10)
   rhoSamples<-rbind(rhoSamples,rho_curr)
   user2D<-t(apply(clicking_data,1,sampleForOneUserClicks,rho_curr=rho_curr,alpha0=10))
   userArray3D<-abind(userArray3D,user2D,along = 3)
 }
 
-duration1<-proc.time()-start
-userArray3D<-userArray3D[,,2001:n_samples]
+duration2<-proc.time()-start
+
+userArray3D<-userArray3D[,,1001:n_samples]
 K<-2
 recs<-vector()
 truth<-vector()
@@ -75,7 +78,6 @@ for(userj in 1:N){
 }
 
 mean(correctOrWrong)
-
 
 heatMat_pseudo<-heatMap(rhoSamples,rho0)
 par(mai=c(1,1,0.65,1))

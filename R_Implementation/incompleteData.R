@@ -6,8 +6,8 @@ require(tidyr)
 require(abind)
 
 ################preliminaries###################
-source("./allFunctions.R")
-source("./pseudoSamplingFuncs.R")
+source("./shared/allFunctions.R")
+source("./shared/pseudoSamplingFuncs.R")
 compute_method<-"package"
 data_mode<-"potatoes"
 
